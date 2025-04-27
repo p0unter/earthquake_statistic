@@ -1,0 +1,41 @@
+@import url("_navbar.css");
+
+html {
+    background-color: #232323;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    font-weight: 200;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
+main {
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+table th, table td {
+    padding: 5px 10px;
+    font-size: .85rem;
+}
+
+.link {
+    color: rgb(85, 100, 255);
+    text-decoration: underline;
+}
+
+.small {
+    font-size: .6rem;
+}

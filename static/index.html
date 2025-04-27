@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earthquake Statistic - Pounter Presents</title>
+
+    <link rel="stylesheet" href="style/main.css">
+</head>
+<body>
+    <div id="primary">
+        <span class="small">Learn earthquake statistics synchronized with HTML. This project was created by <a href="https://github.com/p0unter" class="link">pounter</a> for educational purposes. Incoming data comes from an external API service.</span>
+    </div>
+    <nav>
+        <div id="nav-brand">
+            <a href="index.html" id="brand-link">Earthquake Stats<small>v0.1</small></a>
+        </div>
+        <div id="nav-menu">
+            <a href="https://github.com/p0unter"><small class="link">pounter presents</small></a>
+        </div>
+    </nav>
+    <main>
+        <section id="rescent-list">
+            <table border="0">
+                <thead>
+                    <tr>
+                        <th>Tarih</th>
+                        <th>Saat</th>
+                        <th>Enlem</th>
+                        <th>Boylam</th>
+                        <th>Derinlik (km)</th>
+                        <th>Büyüklük</th>
+                        <th>Yer</th>
+                        <th>Şehir</th>
+                        <th>İlçe</th>
+                        <th>Mahalle</th>
+                    </tr>
+                </thead>
+                <tbody id="earthquake-tbody">
+                    <tr>
+                        <td colspan="8">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="js/fetching.js"></script>
+</body>
+</html>

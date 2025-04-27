@@ -1,0 +1,24 @@
+nav {
+    padding: 10px;
+    box-shadow: 0 10px 20px rgba(255, 255, 255, .05);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #232323;
+}
+
+nav #nav-brand #brand-link {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-weight: bold;
+}
+
+#primary {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, .05);
+}
