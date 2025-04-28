@@ -1,7 +1,6 @@
 package src
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -17,18 +16,21 @@ const (
 	localHost = "http://localhost:" + port
 )
 
-type AfadResponse struct {
-	Data []earthQuake `json:"data"`
-}
-
-type earthQuake struct {
-	EventID   int     `json:"EventID"`
-	DateTime  string  `json:"DateTime"`
-	Location  string  `json:"Location"`
-	Magnitude float64 `json:"Magnitude"`
-	Latitude  float64 `json:"Latitude"`
-	Longitude float64 `json:"Longitude"`
-	Depth     float64 `json:"Depth"`
+type EarthQuake struct {
+	EventID        string  `json:"eventID"`
+	RMS            string  `json:"rms"`
+	DateTime       string  `json:"date"`
+	Location       string  `json:"location"`
+	Magnitude      string  `json:"magnitude"`
+	Latitude       string  `json:"latitude"`
+	Longitude      string  `json:"longitude"`
+	Depth          string  `json:"depth"`
+	Country        string  `json:"country"`
+	Province       string  `json:"province"`
+	District       string  `json:"district"`
+	Neighborhood   string  `json:"neighborhood"`
+	IsEventUpdate  bool    `json:"isEventUpdate"`
+	LastUpdateDate *string `json:"lastUpdateDate"`
 }
 
 func earthQuakeHandler(w http.ResponseWriter, r *http.Request) {
@@ -75,45 +77,48 @@ func earthQuakeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("API Response Body:")
-	log.Println(string(bodyBytes))
+	// log.Println("API Response Body:")
+	// log.Println(string(bodyBytes))
 
-	resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+	log.Println("Application working...")
 
-	var afadData AfadResponse
-	if err := json.NewDecoder(resp.Body).Decode(&afadData); err != nil {
-		http.Error(w, "Failed to parse JSON.", http.StatusInternalServerError)
+	var earthquakes []EarthQuake
+	if err := json.Unmarshal(bodyBytes, &earthquakes); err != nil {
+		http.Error(w, "Failed to parse JSON: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
 
-	if len(afadData.Data) == 0 {
-		fmt.Fprint(w, "<tr><td colspan='8'>No data found.</td></tr>")
+	if len(earthquakes) == 0 {
+		fmt.Fprint(w, "<tr><td colspan='10'>No data found.</td></tr>")
 		return
 	}
 
-	for _, d := range afadData.Data {
+	for _, eq := range earthquakes {
 		date := ""
 		timeStr := ""
-		if len(d.DateTime) >= 19 {
-			date = d.DateTime[:10]
-			timeStr = d.DateTime[11:19]
+		if len(eq.DateTime) >= 19 {
+			date = eq.DateTime[:10]
+			timeStr = eq.DateTime[11:19]
 		} else {
-			date = d.DateTime
+			date = eq.DateTime
 		}
 
 		fmt.Fprintf(w, "<tr>"+
-			"<td>%s</td>"+
-			"<td>%s</td>"+
-			"<td>%.4f</td>"+
-			"<td>%.4f</td>"+
-			"<td>%.1f</td>"+
-			"<td>%.1f</td>"+
-			"<td>%s</td>"+
-			"<td>-</td>"+
+			"<td>%s</td>"+ // Date
+			"<td>%s</td>"+ // Time
+			"<td>%s</td>"+ // Latitude
+			"<td>%s</td>"+ // Longitude
+			"<td>%s</td>"+ // Depth
+			"<td>%s</td>"+ // Magnitude
+			"<td>%s</td>"+ // Location
+			"<td>%s</td>"+ // Country/Province
+			"<td>%s</td>"+ // District
+			"<td>%s</td>"+ // Neighborhood
 			"</tr>\n",
-			date, timeStr, d.Latitude, d.Longitude, d.Depth, d.Magnitude, d.Location)
+			date, timeStr, eq.Latitude, eq.Longitude, eq.Depth, eq.Magnitude, eq.Location,
+			eq.Province, eq.District, eq.Neighborhood)
 	}
 }
 
